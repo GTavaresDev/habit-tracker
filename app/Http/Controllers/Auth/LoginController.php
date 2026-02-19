@@ -15,21 +15,23 @@ class LoginController extends Controller
 
     public function authenticate(Request $request)
     {
-        $request->validate([
+
+        // Validate form data
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (! Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
-            return redirect()->back()
-                ->withErrors([
-                    'email' => 'Email ou senha inválidos.',
-                ])
-                ->onlyInput('email');
+        // Attempt authentication and return error on failure
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            return back()->withErrors([
+                'email' => 'Credenciais invalidas',
+            ])->onlyInput('email');
         }
 
         $request->session()->regenerate();
 
         return redirect('/home');
+
     }
 }
