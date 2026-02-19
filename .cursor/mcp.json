@@ -1,0 +1,12 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "wsl.exe",
+            "args": [
+                "/home/tavares/.config/herd-lite/bin/php",
+                "/home/tavares/Development/habit-tracker/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
