@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
@@ -32,11 +32,11 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/dashboard');
+        return redirect()->route('site.dashboard');
 
     }
 
-    //Log the user out of the application. 
+    // Log the user out of the application.
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
@@ -45,6 +45,6 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('site.index');
     }
 }
