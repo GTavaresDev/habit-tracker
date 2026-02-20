@@ -36,11 +36,16 @@
               value="{{ old('email') }}"
               autocomplete="email"
               required
-              class="w-full rounded-xl border border-white/25 bg-white/10 px-4 py-3 text-white outline-none transition placeholder:text-gray-300 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
+              class="w-full rounded-xl border {{ $errors->has('email') ? 'border-rose-400/60 bg-rose-400/5' : 'border-white/25 bg-white/10' }} px-4 py-3 text-white outline-none transition placeholder:text-gray-300 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
               placeholder="voce@exemplo.com"
             >
             @error('email')
-              <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+              <p class="mt-2 flex items-center gap-1.5 text-sm text-rose-200">
+                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                {{ $message }}
+              </p>
             @enderror
           </div>
 
@@ -57,7 +62,7 @@
                 type="password"
                 autocomplete="current-password"
                 required
-                class="w-full rounded-xl border border-white/25 bg-white/10 px-4 py-3 pr-12 text-white outline-none transition placeholder:text-gray-300 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
+                class="w-full rounded-xl border {{ $errors->has('password') ? 'border-rose-400/60 bg-rose-400/5' : 'border-white/25 bg-white/10' }} px-4 py-3 pr-12 text-white outline-none transition placeholder:text-gray-300 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/40"
                 placeholder="Digite sua senha"
               >
               <button
@@ -70,7 +75,12 @@
               </button>
             </div>
             @error('password')
-              <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+              <p class="mt-2 flex items-center gap-1.5 text-sm text-rose-200">
+                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                {{ $message }}
+              </p>
             @enderror
           </div>
 
@@ -98,7 +108,10 @@
 
         <p class="mt-6 text-center text-sm text-gray-200">
           Ainda nao tem conta?
-          <a href="#" class="font-semibold text-cyan-200 transition hover:text-cyan-100">Criar cadastro</a>
+          <a href=" {{ route('site.create-user') }}" 
+          class="font-semibold text-cyan-200 transition hover:text-cyan-100">
+          Criar cadastro
+        </a>
         </p>
       </section>
     </div>
