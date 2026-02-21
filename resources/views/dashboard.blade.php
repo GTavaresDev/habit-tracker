@@ -11,7 +11,7 @@
         <p class="text-sm font-medium uppercase tracking-wider text-cyan-200">Meus hábitos</p>
         <div class="mt-2 flex items-center justify-between gap-4">
           <h1 class="text-3xl font-semibold text-white">Dashboard</h1>
-          <a href="">
+          <a href=" {{ route('site.create-habit') }}">
             <button
                 type="button"
                 class="rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-500 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:from-cyan-300 hover:to-indigo-400 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"

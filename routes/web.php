@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\HabitController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,10 @@ Route::post('/create-user', [RegisterController::class, 'store'])->name('site.au
 // Rota de Dashboard
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [SiteController::class, 'dashboard'])->name('site.dashboard');
+
+    // Habits
+    Route::get('/create-habit', [HabitController::class, 'index'])->name('site.create-habit');
+    Route::post('/create-habit', [HabitController::class, 'create'])->name('site.create-habit');
 });
 
 // Rotas publicas
