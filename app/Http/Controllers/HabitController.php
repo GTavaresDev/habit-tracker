@@ -12,16 +12,15 @@ class HabitController extends Controller
         return view('create-habit');
     }
 
-    public function create(HabitRequest $habit)
+    public function store(HabitRequest $request)
     {
-        $habit = Habit::query()->create([
-            'user_id' => auth()->user()->id,
-            'name' => $habit->input('name'),
+        Habit::create([
+            'user_id' => auth()->id(),
+            'name' => $request->validated()['name'],
         ]);
 
-        $habits = auth()->user()->habits;
-        $habitLogs = auth()->user()->habitLogs;
-
-        return view('dashboard', compact('habits', 'habitLogs')); 
+        return redirect()
+            ->route('site.dashboard')
+            ->with('success', 'Hábito cadastrado com sucesso!');
     }
 }

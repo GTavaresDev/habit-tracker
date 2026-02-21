@@ -1,26 +1,37 @@
-<header class="bg-white border-b-2 flex items-center justify-between p-4">
- {{-- LOGO --}}
-  <div>
-    Logo do site
-  </div>
-
-  {{-- GitHub --}}
-  <div class="flex items-center gap-2">
-    github
-
-    @auth
-      <form action="{{ route('site.logout') }}" method="POST">
-        @csrf
-        <button type="submit" class="bg-white p-2 border-2">
-          Sair
-        </button>
-      </form>
-    @endauth
-
-    @guest
-      <a href="{{ route('site.index') }}" class="bg-white p-2 border-2">
-        Login
+<header class="border-b border-white/20 bg-white/10 backdrop-blur-xl">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    {{-- LOGO --}}
+    <div>
+      <a href="{{ route('site.dashboard') }}" class="text-xl font-semibold text-white transition hover:text-cyan-200">
+        Logo do site
       </a>
-    @endguest
+    </div>
+
+    {{-- Menu --}}
+    <div class="flex items-center gap-3">
+      @auth
+        <p class="text-sm text-gray-200">
+          Bem vindo, <span class="font-medium text-white">{{ auth()->user()->name }}</span>
+        </p>
+        <form action="{{ route('site.logout') }}" method="POST">
+          @csrf
+          <button
+            type="submit"
+            class="rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
+          >
+            Sair
+          </button>
+        </form>
+      @endauth
+
+      @guest
+        <a
+          href="{{ route('site.index') }}"
+          class="rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
+        >
+          Login
+        </a>
+      @endguest
+    </div>
   </div>
 </header>

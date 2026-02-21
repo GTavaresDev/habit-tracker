@@ -10,7 +10,7 @@
     @vite('resources/css/app.css')
   </head>
 
-  <body class="bg-gray-800">
+  <body class="bg-gray-800 pb-20">
     {{-- Header --}}
     <x-header />
 
