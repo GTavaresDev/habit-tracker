@@ -26,7 +26,7 @@ class HabitController extends Controller
 
     public function destroy(Habit $habit)
     {
-        // Validate if user_id is == habit_id
+        // Check if the authenticated user is the owner of the habit.
         if ($habit->user_id != auth()->id()) {
             abort(code: 403, message: 'Ação bloqueada');
         }
@@ -37,4 +37,24 @@ class HabitController extends Controller
             ->route('site.dashboard')
             ->with('success', 'Hábito removido com sucesso');
     }
+
+    public function edit(Habit $habit)
+    {
+        return view('edit-habit', compact('habit'));
+    }
+
+    public function update(HabitRequest $request, Habit $habit)
+    {
+        // Check if the authenticated user is the owner of the habit.
+        if ($habit->user_id != auth()->id()) {
+            abort(code: 403, message: 'Ação bloqueada');
+        }
+
+        $habit->update($request->all());
+
+        return redirect()
+            ->route('site.dashboard')
+            ->with('success', 'Hábito atualizado com sucesso!');
+    }
+
 }

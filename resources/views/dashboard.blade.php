@@ -43,17 +43,27 @@
                   <p class="text-white font-medium">{{ $item->name }}</p>
                   <span class="text-sm text-gray-300">{{ $item->logs?->count() ?? 0 }} vezes</span>
                 </div>
-                <form action="{{ route('site.delete-habit', $item->id) }}" method="POST" class="inline">
-                  @csrf
-                  @method('DELETE')
-                  <button
-                    type="submit"
-                    onclick="return confirm('Tem certeza que deseja remover este hábito?')"
-                    class="rounded-lg border border-rose-400/40 bg-rose-500/10 px-3 py-1.5 text-sm font-medium text-rose-200 transition hover:bg-rose-500/20 hover:text-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
-                  >
-                    Remover
-                  </button>
-                </form>
+                <div class="flex items-center gap-2">
+                  <a href= " {{ route('site.edit-habit', $item->id )}} ">
+                    <button
+                      type="button"
+                      class="rounded-lg border border-cyan-400/40 bg-cyan-500/10 px-3 py-1.5 text-sm font-medium text-cyan-200 transition hover:bg-cyan-500/20 hover:text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
+                    >
+                      Editar
+                    </button>
+                  </a>
+                  <form action="{{ route('site.delete-habit', $item->id) }}" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button
+                      type="submit"
+                      onclick="return confirm('Tem certeza que deseja remover este hábito?')"
+                      class="rounded-lg border border-rose-400/40 bg-rose-500/10 px-3 py-1.5 text-sm font-medium text-rose-200 transition hover:bg-rose-500/20 hover:text-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
+                    >
+                      Remover
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           @empty

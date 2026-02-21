@@ -23,6 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/create-habit', [HabitController::class, 'index'])->name('site.create-habit');
     Route::post('/create-habit', [HabitController::class, 'store'])->name('site.create-habit');
     Route::delete('/delete-habit/{habit}', [HabitController::class, 'destroy'])->name('site.delete-habit');
+    Route::get('/update-habit/{habit}/edit', [HabitController::class, 'edit'])->name('site.edit-habit');
+    Route::put('/update-habit/{habit}', [HabitController::class, 'update'])->name('site.update-habit');
 });
 
 // Rotas publicas
