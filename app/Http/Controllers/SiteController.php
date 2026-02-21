@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class SiteController extends Controller
 {
     public function index()
     {
         return view('index');
     }
+
     public function dashboard()
     {
-        return view('dashboard');
+        // Retrieves all habits belonging to the authenticated user.
+        $habits = auth()->user()->habits;
+        $habitLogs = auth()->user()->habitLogs;
+
+        return view('dashboard', compact('habits', 'habitLogs'));
     }
 }
