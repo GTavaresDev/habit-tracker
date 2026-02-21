@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Site;
+
+use App\Http\Controllers\Controller;
 
 class SiteController extends Controller
 {
     public function index()
     {
-        return view('index');
+        return view('site.index');
     }
 
     public function dashboard()
@@ -15,6 +17,6 @@ class SiteController extends Controller
         $habits = auth()->user()->habits;
         $habitLogs = auth()->user()->habitLogs;
 
-        return view('dashboard', compact('habits', 'habitLogs'));
+        return view('site.dashboard', compact('habits', 'habitLogs'));
     }
 }

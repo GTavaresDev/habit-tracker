@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Site\Habit;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\HabitRequest;
 use App\Models\Habit;
 
@@ -9,7 +10,7 @@ class HabitController extends Controller
 {
     public function index()
     {
-        return view('create-habit');
+        return view('site.habit.create');
     }
 
     public function store(HabitRequest $request)
@@ -40,7 +41,7 @@ class HabitController extends Controller
 
     public function edit(Habit $habit)
     {
-        return view('edit-habit', compact('habit'));
+        return view('site.habit.edit', compact('habit'));
     }
 
     public function update(HabitRequest $request, Habit $habit)
@@ -56,5 +57,4 @@ class HabitController extends Controller
             ->route('site.dashboard')
             ->with('success', 'Hábito atualizado com sucesso!');
     }
-
 }

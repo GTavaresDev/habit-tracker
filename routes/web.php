@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\HabitController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\SiteController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Site\Habit\HabitController;
+use App\Http\Controllers\Site\SiteController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas de login e logout
