@@ -23,4 +23,18 @@ class HabitController extends Controller
             ->route('site.dashboard')
             ->with('success', 'Hábito cadastrado com sucesso!');
     }
+
+    public function destroy(Habit $habit)
+    {
+        // Validate if user_id is == habit_id
+        if ($habit->user_id != auth()->id()) {
+            abort(code: 403, message: 'Ação bloqueada');
+        }
+
+        $habit->delete();
+
+        return redirect()
+            ->route('site.dashboard')
+            ->with('success', 'Hábito removido com sucesso');
+    }
 }

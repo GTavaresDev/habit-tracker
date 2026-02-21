@@ -24,12 +24,36 @@
           Gerencie seus hábitos e acompanhe seu progresso.
         </p>
 
+        @if (session('success'))
+          <div class="mt-6 rounded-xl border border-emerald-300/40 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a1 1 0 00-1.214-1.214L9 9.586 7.357 7.943a1 1 0 00-1.214 1.214l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ session('success') }}</span>
+            </div>
+          </div>
+        @endif
+
         <div class="mt-6 space-y-3">
           @forelse ($habits as $item)
             <div class="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm transition hover:bg-white/15">
-              <div class="flex items-center justify-between">
-                <p class="text-white font-medium">{{ $item->name }}</p>
-                <span class="text-sm text-gray-300">{{ $item->logs?->count() ?? 0 }} vezes</span>
+              <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4 flex-1">
+                  <p class="text-white font-medium">{{ $item->name }}</p>
+                  <span class="text-sm text-gray-300">{{ $item->logs?->count() ?? 0 }} vezes</span>
+                </div>
+                <form action="{{ route('site.delete-habit', $item->id) }}" method="POST" class="inline">
+                  @csrf
+                  @method('DELETE')
+                  <button
+                    type="submit"
+                    onclick="return confirm('Tem certeza que deseja remover este hábito?')"
+                    class="rounded-lg border border-rose-400/40 bg-rose-500/10 px-3 py-1.5 text-sm font-medium text-rose-200 transition hover:bg-rose-500/20 hover:text-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
+                  >
+                    Remover
+                  </button>
+                </form>
               </div>
             </div>
           @empty
