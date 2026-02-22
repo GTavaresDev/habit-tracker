@@ -11,7 +11,7 @@
         <p class="text-sm font-medium uppercase tracking-wider text-cyan-200">Meus hábitos</p>
         <div class="mt-2 flex items-center justify-between gap-4">
           <h1 class="text-3xl font-semibold text-white">Dashboard</h1>
-          <a href=" {{ route('site.create-habit') }}">
+          <a href="{{ route('habits.create') }}">
             <button
                 type="button"
                 class="rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-500 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:from-cyan-300 hover:to-indigo-400 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
@@ -23,6 +23,34 @@
         <p class="mt-2 text-sm text-gray-200">
           Gerencie seus hábitos e acompanhe seu progresso.
         </p>
+
+        {{-- Nav Bar --}}
+        <nav class="mt-6 flex gap-2 overflow-x-auto pb-2">
+          <a
+            href="#"
+            class="whitespace-nowrap rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200 transition hover:bg-cyan-500/20 hover:text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
+          >
+            Hoje
+          </a>
+          <a
+            href="#"
+            class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
+          >
+            Histórico
+          </a>
+          <a
+            href="#"
+            class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
+          >
+            Calendário
+          </a>
+          <a
+            href="#"
+            class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
+          >
+            Gerenciar Hábitos
+          </a>
+        </nav>
 
         @if (session('success'))
           <div class="mt-6 rounded-xl border border-emerald-300/40 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
@@ -44,7 +72,7 @@
                   <span class="text-sm text-gray-300">{{ $item->logs?->count() ?? 0 }} vezes</span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <a href= " {{ route('site.edit-habit', $item->id )}} ">
+                  <a href="{{ route('habits.edit', $item) }}">
                     <button
                       type="button"
                       class="rounded-lg border border-cyan-400/40 bg-cyan-500/10 px-3 py-1.5 text-sm font-medium text-cyan-200 transition hover:bg-cyan-500/20 hover:text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
@@ -52,7 +80,7 @@
                       Editar
                     </button>
                   </a>
-                  <form action="{{ route('site.delete-habit', $item->id) }}" method="POST" class="inline">
+                  <form action="{{ route('habits.destroy', $item) }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
                     <button

@@ -143,7 +143,7 @@
 
         <p class="mt-6 text-center text-sm text-gray-200">
           Ja tem uma conta?
-          <a href="{{ route('site.index') }}" class="font-semibold text-cyan-200 transition hover:text-cyan-100">
+          <a href="{{ route('login') }}" class="font-semibold text-cyan-200 transition hover:text-cyan-100">
             Fazer login
           </a>
         </p>

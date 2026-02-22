@@ -25,7 +25,7 @@
                 <nav class="flex items-center justify-end gap-4">
                     @auth
                         <a
-                            href="{{ url('/dashboard') }}"
+                            href="{{ route('habits.index') }}"
                             class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
                         >
                             Dashboard
@@ -38,9 +38,9 @@
                             Log in
                         </a>
 
-                        @if (Route::has('register'))
+                        @if (Route::has('site.create-user'))
                             <a
-                                href="{{ route('register') }}"
+                                href="{{ route('site.create-user') }}"
                                 class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
                                 Register
                             </a>
@@ -270,7 +270,7 @@
             </main>
         </div>
 
-        @if (Route::has('login'))
+        @if (Route::has('site.index'))
             <div class="h-14.5 hidden lg:block"></div>
         @endif
     </body>

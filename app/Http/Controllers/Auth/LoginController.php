@@ -30,7 +30,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('site.dashboard');
+        return redirect()->route('habits.index');
 
     }
 
@@ -43,6 +43,6 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('site.index');
+        return redirect()->route('login');
     }
 }
