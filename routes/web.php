@@ -28,6 +28,7 @@ Route::post('/create-user', [RegisterController::class, 'store'])->name('site.au
  */
 Route::middleware('auth')->group(function () {
     Route::resource('habits', HabitController::class);
+    Route::post('habits/{habit}/toggle', [HabitController::class, 'toggle'])->name('habits.toggle');
 });
 
 // Rotas publicas

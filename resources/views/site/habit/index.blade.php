@@ -56,13 +56,13 @@
           </nav>
         </div>
 
-        @if (session('success'))
+        @if (session('success') || session('sucess'))
           <div class="mt-6 rounded-xl border border-emerald-300/40 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
             <div class="flex items-center gap-2">
               <svg class="h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a1 1 0 00-1.214-1.214L9 9.586 7.357 7.943a1 1 0 00-1.214 1.214l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
               </svg>
-              <span>{{ session('success') }}</span>
+              <span>{{ session('success') ?? session('sucess') }}</span>
             </div>
           </div>
         @endif
@@ -85,15 +85,21 @@
             <div class="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm transition hover:bg-white/15">
               <div class="flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4 flex-1">
-                  <button
-                    type="button"
-                    class="rounded-lg border border-emerald-400/40 bg-emerald-500/10 px-3 py-1.5 text-emerald-200 transition-all duration-200 hover:bg-emerald-500/20 hover:text-emerald-100 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
-                    title="Marcar como feito"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                  </button>
+                  @php
+                    $isCompletedToday = in_array($item->id, $todayCompletedHabitIds ?? []);
+                  @endphp
+                  <form action="{{ route('habits.toggle', $item) }}" method="POST" class="inline">
+                    @csrf
+                    <button
+                      type="submit"
+                      class="rounded-lg border {{ $isCompletedToday ? 'border-emerald-400/60 bg-emerald-500/20 text-emerald-100' : 'border-white/25 bg-white/10 text-white' }} px-3 py-1.5 transition-all duration-200 {{ $isCompletedToday ? 'hover:bg-emerald-500/30' : 'hover:bg-white/15 hover:border-white/40' }} hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                      title="{{ $isCompletedToday ? 'Desmarcar hábito' : 'Marcar como feito' }}"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </button>
+                  </form>
                   <p class="text-white font-medium">{{ $item->name }}</p>
                   <span class="text-sm text-gray-300">{{ $item->logs?->count() ?? 0 }} vezes</span>
                 </div>
