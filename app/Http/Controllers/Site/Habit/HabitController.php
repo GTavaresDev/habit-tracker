@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Site\Habit;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HabitRequest;
 use App\Models\Habit;
+use Illuminate\Support\Facades\Auth;
 
 class HabitController extends Controller
 {
@@ -16,8 +17,8 @@ class HabitController extends Controller
         }
 
         // Retrieves all habits belonging to the authenticated user.
-        $habits = auth()->user()->habits;
-        $habitLogs = auth()->user()->habitLogs;
+        $habits = Auth::user()->habits;
+        $habitLogs = Auth::user()->habitLogs;
 
         // Check if viewing "today" view
         $isTodayView = request()->query('view') === 'hoje';
