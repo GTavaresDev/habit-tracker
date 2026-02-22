@@ -7,7 +7,7 @@
     </div>
 
     <div class="mx-auto w-full max-w-4xl">
-      <section class="rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-xl sm:p-8">
+      <section class="rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-xl sm:p-8 overflow-visible">
         <p class="text-sm font-medium uppercase tracking-wider text-cyan-200">Meus hábitos</p>
         <div class="mt-2 flex items-center justify-between gap-4">
           <h1 class="text-3xl font-semibold text-white">Dashboard</h1>
@@ -25,32 +25,36 @@
         </p>
 
         {{-- Nav Bar --}}
-        <nav class="mt-6 flex gap-2 overflow-x-auto pb-2">
-          <a
-            href="#"
-            class="whitespace-nowrap rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200 transition hover:bg-cyan-500/20 hover:text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
-          >
-            Hoje
-          </a>
-          <a
-            href="#"
-            class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
-          >
-            Histórico
-          </a>
-          <a
-            href="#"
-            class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
-          >
-            Calendário
-          </a>
-          <a
-            href="#"
-            class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
-          >
-            Gerenciar Hábitos
-          </a>
-        </nav>
+        <div class="mt-6 -mx-2 sm:-mx-4 py-4 overflow-visible">
+          <nav class="overflow-x-auto overflow-y-visible scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <div class="flex gap-2 px-2 sm:px-4 py-1 min-w-max">
+              <a
+                href="#"
+                class="whitespace-nowrap rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-200 transition-all duration-200 hover:bg-cyan-500/20 hover:text-cyan-100 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 shadow-sm hover:shadow-md"
+              >
+                Hoje
+              </a>
+              <a
+                href="#"
+                class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-white/15 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-300/50 shadow-sm hover:shadow-md"
+              >
+                Histórico
+              </a>
+              <a
+                href="#"
+                class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-white/15 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-300/50 shadow-sm hover:shadow-md"
+              >
+                Calendário
+              </a>
+              <a
+                href="#"
+                class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-white/15 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-300/50 shadow-sm hover:shadow-md"
+              >
+                Gerenciar Hábitos
+              </a>
+            </div>
+          </nav>
+        </div>
 
         @if (session('success'))
           <div class="mt-6 rounded-xl border border-emerald-300/40 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
