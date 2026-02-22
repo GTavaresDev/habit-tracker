@@ -27,7 +27,7 @@ class RegisterController extends Controller
         $request->session()->regenerate();
 
         return redirect()
-            ->route('habits.index')
+            ->route('habits.index', ['view' => 'hoje'])
             ->with('success', 'Usuário cadastrado com sucesso!');
     }
 }

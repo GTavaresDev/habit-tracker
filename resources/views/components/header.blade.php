@@ -2,7 +2,7 @@
   <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
     {{-- LOGO --}}
     <div>
-      <a href="{{ route('habits.index') }}" class="text-xl font-semibold text-white transition hover:text-cyan-200">
+      <a href="{{ route('habits.index', ['view' => 'hoje']) }}" class="text-xl font-semibold text-white transition hover:text-cyan-200">
         Logo do site
       </a>
     </div>

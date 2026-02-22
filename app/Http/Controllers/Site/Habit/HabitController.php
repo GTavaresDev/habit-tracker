@@ -10,11 +10,20 @@ class HabitController extends Controller
 {
     public function index()
     {
+        // Redirect to "hoje" view by default if no view parameter is provided
+        if (! request()->has('view')) {
+            return redirect()->route('habits.index', ['view' => 'hoje']);
+        }
+
         // Retrieves all habits belonging to the authenticated user.
         $habits = auth()->user()->habits;
         $habitLogs = auth()->user()->habitLogs;
 
-        return view('site.habit.index', compact('habits', 'habitLogs'));
+        // Check if viewing "today" view
+        $isTodayView = request()->query('view') === 'hoje';
+        $todayDateFormatted = $isTodayView ? now()->locale('pt_BR')->translatedFormat('l, d \d\e F \d\e Y') : null;
+
+        return view('site.habit.index', compact('habits', 'habitLogs', 'isTodayView', 'todayDateFormatted'));
     }
 
     public function create()
@@ -30,7 +39,7 @@ class HabitController extends Controller
         ]);
 
         return redirect()
-            ->route('habits.index')
+            ->route('habits.index', ['view' => 'hoje'])
             ->with('success', 'Hábito cadastrado com sucesso!');
     }
 
@@ -54,7 +63,7 @@ class HabitController extends Controller
         $habit->update($request->all());
 
         return redirect()
-            ->route('habits.index')
+            ->route('habits.index', ['view' => 'hoje'])
             ->with('success', 'Hábito atualizado com sucesso!');
     }
 
@@ -68,7 +77,7 @@ class HabitController extends Controller
         $habit->delete();
 
         return redirect()
-            ->route('habits.index')
+            ->route('habits.index', ['view' => 'hoje'])
             ->with('success', 'Hábito removido com sucesso');
     }
 }
