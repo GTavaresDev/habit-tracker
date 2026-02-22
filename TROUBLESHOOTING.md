@@ -19,11 +19,42 @@
 - Banco de dados não conectado
 - Storage sem permissões
 - Variáveis de ambiente faltando
+- Problema com Vite/manifest em produção
+- Erro no código PHP
 
-**Solução:**
-1. Verifique se `APP_KEY` está configurada nas variáveis de ambiente
-2. Verifique se as variáveis do banco estão mapeadas corretamente
-3. Verifique os logs para ver o erro específico
+**Solução passo a passo:**
+
+1. **Ative temporariamente o debug para ver o erro:**
+   - No Railway, vá em **Variables**
+   - Adicione ou altere: `APP_DEBUG=true`
+   - Faça redeploy
+   - Acesse a URL novamente - você verá o erro detalhado
+
+2. **Verifique os logs do Railway:**
+   - No dashboard, clique no serviço
+   - Vá em **Deployments** > **View Logs**
+   - Procure por mensagens de erro em vermelho
+   - Copie a mensagem de erro completa
+
+3. **Verifique variáveis essenciais:**
+   ```env
+   APP_KEY=base64:SUA_CHAVE_AQUI  # OBRIGATÓRIO!
+   APP_ENV=production
+   APP_DEBUG=false  # ou true para debug
+   APP_URL=${{RAILWAY_PUBLIC_DOMAIN}}
+   ```
+
+4. **Verifique se o build do Vite foi executado:**
+   - Nos logs do build, procure por "npm run build"
+   - Verifique se terminou com sucesso
+   - Se falhou, veja a mensagem de erro específica
+
+5. **Verifique permissões de storage:**
+   - O build já cria os diretórios, mas se houver erro, execute:
+   ```bash
+   mkdir -p storage/framework/{sessions,views,cache}
+   chmod -R 775 storage bootstrap/cache
+   ```
 
 #### ❌ Erro: "No application encryption key has been specified"
 
