@@ -32,4 +32,5 @@ Route::middleware('auth')->group(function () {
 });
 
 // Rotas publicas
+Route::get('/', [SiteController::class, 'index'])->name('home');
 Route::get('/home', [SiteController::class, 'index']);
