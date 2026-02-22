@@ -15,9 +15,20 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 Route::get('/create-user', [RegisterController::class, 'index'])->name('site.create-user');
 Route::post('/create-user', [RegisterController::class, 'store'])->name('site.auth.register');
 
-// Rotas de Habits (Resource)
+/*
+ * Route::resource('habits', HabitController::class) gera automaticamente:
+ *
+ * GET         /habits              habits.index
+ * GET         /habits/create       habits.create
+ * POST        /habits              habits.store
+ * GET         /habits/{habit}      habits.show
+ * GET         /habits/{habit}/edit habits.edit
+ * PUT/PATCH   /habits/{habit}      habits.update
+ * DELETE      /habits/{habit}      habits.destroy
+ */
 Route::middleware('auth')->group(function () {
     Route::resource('habits', HabitController::class);
+    Route::post('habits/{habit}/toggle', [HabitController::class, 'toggle'])->name('habits.toggle');
 });
 
 // Rotas publicas

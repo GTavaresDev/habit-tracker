@@ -52,7 +52,7 @@
 
           <div class="flex gap-3">
             <a
-              href="{{ route('habits.index') }}"
+              href="{{ route('habits.index', ['view' => 'hoje']) }}"
               class="flex-1 rounded-xl border border-white/25 bg-white/10 px-4 py-3 text-center font-semibold text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
             >
               Cancelar

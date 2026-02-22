@@ -30,7 +30,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('habits.index');
+        return redirect()->route('habits.index', ['view' => 'hoje']);
 
     }
 

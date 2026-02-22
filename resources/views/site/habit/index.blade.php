@@ -29,8 +29,8 @@
           <nav class="overflow-x-auto overflow-y-visible scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
             <div class="flex gap-2 px-2 sm:px-4 py-1 min-w-max">
               <a
-                href="#"
-                class="whitespace-nowrap rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-200 transition-all duration-200 hover:bg-cyan-500/20 hover:text-cyan-100 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 shadow-sm hover:shadow-md"
+                href="{{ route('habits.index', ['view' => 'hoje']) }}"
+                class="whitespace-nowrap rounded-xl border {{ request()->query('view') === 'hoje' ? 'border-cyan-400/40 bg-cyan-500/10 text-cyan-200' : 'border-white/25 bg-white/10 text-white' }} px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-cyan-500/20 hover:text-cyan-100 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 shadow-sm hover:shadow-md"
               >
                 Hoje
               </a>
@@ -56,13 +56,26 @@
           </nav>
         </div>
 
-        @if (session('success'))
+        @if (session('success') || session('sucess'))
           <div class="mt-6 rounded-xl border border-emerald-300/40 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
             <div class="flex items-center gap-2">
               <svg class="h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a1 1 0 00-1.214-1.214L9 9.586 7.357 7.943a1 1 0 00-1.214 1.214l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
               </svg>
-              <span>{{ session('success') }}</span>
+              <span>{{ session('success') ?? session('sucess') }}</span>
+            </div>
+          </div>
+        @endif
+
+        @if ($isTodayView ?? false)
+          <div class="mt-6 rounded-xl border border-cyan-300/40 bg-cyan-400/10 px-4 py-3">
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5 flex-shrink-0 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <p class="text-sm font-medium text-cyan-100">
+                {{ $todayDateFormatted }}
+              </p>
             </div>
           </div>
         @endif
@@ -72,15 +85,21 @@
             <div class="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm transition hover:bg-white/15">
               <div class="flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4 flex-1">
-                  <button
-                    type="button"
-                    class="rounded-lg border border-emerald-400/40 bg-emerald-500/10 px-3 py-1.5 text-emerald-200 transition-all duration-200 hover:bg-emerald-500/20 hover:text-emerald-100 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
-                    title="Marcar como feito"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                  </button>
+                  @php
+                    $isCompletedToday = in_array($item->id, $todayCompletedHabitIds ?? []);
+                  @endphp
+                  <form action="{{ route('habits.toggle', $item) }}" method="POST" class="inline">
+                    @csrf
+                    <button
+                      type="submit"
+                      class="rounded-lg border {{ $isCompletedToday ? 'border-emerald-400/60 bg-emerald-500/20 text-emerald-100' : 'border-white/25 bg-white/10 text-white' }} px-3 py-1.5 transition-all duration-200 {{ $isCompletedToday ? 'hover:bg-emerald-500/30' : 'hover:bg-white/15 hover:border-white/40' }} hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                      title="{{ $isCompletedToday ? 'Desmarcar hábito' : 'Marcar como feito' }}"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </button>
+                  </form>
                   <p class="text-white font-medium">{{ $item->name }}</p>
                   <span class="text-sm text-gray-300">{{ $item->logs?->count() ?? 0 }} vezes</span>
                 </div>
