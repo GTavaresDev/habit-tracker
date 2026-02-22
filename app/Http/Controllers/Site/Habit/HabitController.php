@@ -8,9 +8,12 @@ use App\Models\Habit;
 use App\Models\HabitLog;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class HabitController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
         // Redirect to "hoje" view by default if no view parameter is provided
@@ -19,24 +22,30 @@ class HabitController extends Controller
         }
 
         // Retrieves all habits belonging to the authenticated user with logs eager loaded.
-        $habits = Auth::user()->habits()->with('logs')->get();
-        $habitLogs = Auth::user()->logs;
+        $habits = Auth::user()->habits()
+            ->with('logs')
+            ->get();
 
         // Check if viewing "today" view
         $isTodayView = request()->query('view') === 'hoje';
         $todayDateFormatted = $isTodayView ? now()->locale('pt_BR')->translatedFormat('l, d \d\e F \d\e Y') : null;
 
-        // Get today's completed habit IDs for the authenticated user
+        // Get today's completed habit IDs using already loaded logs (no additional query)
         $todayCompletedHabitIds = [];
         if ($isTodayView) {
             $today = Carbon::today()->toDateString();
-            $todayCompletedHabitIds = Auth::user()->logs()
-                ->where('completed_at', $today)
-                ->pluck('habit_id')
-                ->toArray();
+            foreach ($habits as $habit) {
+                $hasLogToday = $habit->logs->contains(function ($log) use ($today) {
+                    $logDate = is_string($log->completed_at) ? $log->completed_at : $log->completed_at->toDateString();
+                    return $logDate === $today;
+                });
+                if ($hasLogToday) {
+                    $todayCompletedHabitIds[] = $habit->id;
+                }
+            }
         }
 
-        return view('site.habit.index', compact('habits', 'habitLogs', 'isTodayView', 'todayDateFormatted', 'todayCompletedHabitIds'));
+        return view('site.habit.index', compact('habits', 'isTodayView', 'todayDateFormatted', 'todayCompletedHabitIds'));
     }
 
     public function create()
@@ -59,9 +68,11 @@ class HabitController extends Controller
     public function edit(Habit $habit)
     {
         // Check if the authenticated user is the owner of the habit.
-        if ($habit->user_id != auth()->id()) {
-            abort(code: 403, message: 'Ação bloqueada');
-        }
+        // if ($habit->user_id != auth()->id()) {
+        //     abort(code: 403, message: 'Ação bloqueada');
+        // }
+
+        $this->authorize('update', $habit);
 
         return view('site.habit.edit', compact('habit'));
     }
@@ -69,9 +80,11 @@ class HabitController extends Controller
     public function update(HabitRequest $request, Habit $habit)
     {
         // Check if the authenticated user is the owner of the habit.
-        if ($habit->user_id != auth()->id()) {
-            abort(code: 403, message: 'Ação bloqueada');
-        }
+        // if ($habit->user_id != auth()->id()) {
+        //     abort(code: 403, message: 'Ação bloqueada');
+        // }
+
+        $this->authorize('update', $habit);
 
         $habit->update($request->all());
 
@@ -83,9 +96,11 @@ class HabitController extends Controller
     public function destroy(Habit $habit)
     {
         // Check if the authenticated user is the owner of the habit.
-        if ($habit->user_id != auth()->id()) {
-            abort(code: 403, message: 'Ação bloqueada');
-        }
+        // if ($habit->user_id != auth()->id()) {
+        //     abort(code: 403, message: 'Ação bloqueada');
+        // }
+
+        $this->authorize('delete', $habit);
 
         $habit->delete();
 
