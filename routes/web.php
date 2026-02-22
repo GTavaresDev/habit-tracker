@@ -7,7 +7,7 @@ use App\Http\Controllers\Site\SiteController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas de login e logout
-Route::get('/login', [LoginController::class, 'index'])->name('site.index');
+Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('site.auth');
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('site.logout');
 
@@ -15,16 +15,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 Route::get('/create-user', [RegisterController::class, 'index'])->name('site.create-user');
 Route::post('/create-user', [RegisterController::class, 'store'])->name('site.auth.register');
 
-// Rota de Dashboard
+// Rotas de Habits (Resource)
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [SiteController::class, 'dashboard'])->name('site.dashboard');
-
-    // Habits
-    Route::get('/create-habit', [HabitController::class, 'index'])->name('site.create-habit');
-    Route::post('/create-habit', [HabitController::class, 'store'])->name('site.create-habit');
-    Route::delete('/delete-habit/{habit}', [HabitController::class, 'destroy'])->name('site.delete-habit');
-    Route::get('/update-habit/{habit}/edit', [HabitController::class, 'edit'])->name('site.edit-habit');
-    Route::put('/update-habit/{habit}', [HabitController::class, 'update'])->name('site.update-habit');
+    Route::resource('habits', HabitController::class);
 });
 
 // Rotas publicas

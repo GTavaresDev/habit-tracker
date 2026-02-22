@@ -2,7 +2,7 @@
   <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
     {{-- LOGO --}}
     <div>
-      <a href="{{ route('site.dashboard') }}" class="text-xl font-semibold text-white transition hover:text-cyan-200">
+      <a href="{{ route('habits.index') }}" class="text-xl font-semibold text-white transition hover:text-cyan-200">
         Logo do site
       </a>
     </div>
@@ -26,7 +26,7 @@
 
       @guest
         <a
-          href="{{ route('site.index') }}"
+          href="{{ route('login') }}"
           class="rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
         >
           Login

@@ -24,7 +24,7 @@
           </div>
         @endif
 
-        <form action="{{ route('site.update-habit', $habit->id) }}" method="POST" class="mt-8 space-y-5">
+        <form action="{{ route('habits.update', $habit) }}" method="POST" class="mt-8 space-y-5">
           @csrf
           @method('PUT')
 
@@ -52,7 +52,7 @@
 
           <div class="flex gap-3">
             <a
-              href="{{ route('site.dashboard') }}"
+              href="{{ route('habits.index') }}"
               class="flex-1 rounded-xl border border-white/25 bg-white/10 px-4 py-3 text-center font-semibold text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-cyan-300/50"
             >
               Cancelar

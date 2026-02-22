@@ -10,6 +10,15 @@ class HabitController extends Controller
 {
     public function index()
     {
+        // Retrieves all habits belonging to the authenticated user.
+        $habits = auth()->user()->habits;
+        $habitLogs = auth()->user()->habitLogs;
+
+        return view('site.habit.index', compact('habits', 'habitLogs'));
+    }
+
+    public function create()
+    {
         return view('site.habit.create');
     }
 
@@ -21,26 +30,17 @@ class HabitController extends Controller
         ]);
 
         return redirect()
-            ->route('site.dashboard')
+            ->route('habits.index')
             ->with('success', 'Hábito cadastrado com sucesso!');
     }
 
-    public function destroy(Habit $habit)
+    public function edit(Habit $habit)
     {
         // Check if the authenticated user is the owner of the habit.
         if ($habit->user_id != auth()->id()) {
             abort(code: 403, message: 'Ação bloqueada');
         }
 
-        $habit->delete();
-
-        return redirect()
-            ->route('site.dashboard')
-            ->with('success', 'Hábito removido com sucesso');
-    }
-
-    public function edit(Habit $habit)
-    {
         return view('site.habit.edit', compact('habit'));
     }
 
@@ -54,7 +54,21 @@ class HabitController extends Controller
         $habit->update($request->all());
 
         return redirect()
-            ->route('site.dashboard')
+            ->route('habits.index')
             ->with('success', 'Hábito atualizado com sucesso!');
+    }
+
+    public function destroy(Habit $habit)
+    {
+        // Check if the authenticated user is the owner of the habit.
+        if ($habit->user_id != auth()->id()) {
+            abort(code: 403, message: 'Ação bloqueada');
+        }
+
+        $habit->delete();
+
+        return redirect()
+            ->route('habits.index')
+            ->with('success', 'Hábito removido com sucesso');
     }
 }
