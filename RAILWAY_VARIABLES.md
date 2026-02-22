@@ -35,8 +35,8 @@ APP_URL=${{RAILWAY_PUBLIC_DOMAIN}}
 
 # Banco de Dados - USE AS VARIÁVEIS DO RAILWAY!
 DB_CONNECTION=mysql
-DB_HOST=${{MYSQL_HOST}}
-DB_PORT=${{MYSQL_PORT}}
+DB_HOST=${{MYSQLHOST}}
+DB_PORT=${{MYSQLPORT}}
 DB_DATABASE=${{MYSQLDATABASE}}
 DB_USERNAME=${{MYSQLUSER}}
 DB_PASSWORD=${{MYSQLPASSWORD}}
@@ -57,7 +57,7 @@ LOG_LEVEL=error
 ### 3. REMOVA ou CORRIJA estas variáveis:
 
 ❌ **REMOVA ou CORRIJA:**
-- `DB_HOST="127.0.0.1"` → Use `DB_HOST=${{MYSQL_HOST}}`
+- `DB_HOST="127.0.0.1"` → Use `DB_HOST=${{MYSQLHOST}}`
 - `DB_DATABASE="habit_tracker"` → Use `DB_DATABASE=${{MYSQLDATABASE}}`
 - `DB_USERNAME="root"` → Use `DB_USERNAME=${{MYSQLUSER}}`
 - `APP_URL="http://localhost"` → Use `APP_URL=${{RAILWAY_PUBLIC_DOMAIN}}`
@@ -106,7 +106,8 @@ VITE_APP_NAME="${APP_NAME}"
 
 2. **No Railway, vá em Variables e:**
    - Adicione `APP_KEY` com o valor gerado
-   - Altere `DB_HOST` para `${{MYSQL_HOST}}`
+   - Altere `DB_HOST` para `${{MYSQLHOST}}`
+   - Altere `DB_PORT` para `${{MYSQLPORT}}`
    - Altere `DB_DATABASE` para `${{MYSQLDATABASE}}`
    - Altere `DB_USERNAME` para `${{MYSQLUSER}}`
    - Adicione `DB_PASSWORD` com valor `${{MYSQLPASSWORD}}`
