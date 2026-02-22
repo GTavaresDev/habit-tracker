@@ -88,7 +88,28 @@ DB_USERNAME=${{PGUSER}}
 DB_PASSWORD=${{PGPASSWORD}}
 ```
 
-### Passo 5: Gerar APP_KEY
+### Passo 5: Atualizar Composer Lock (IMPORTANTE)
+
+Antes de fazer o deploy, você precisa atualizar o `composer.lock` para ser compatível com PHP 8.4:
+
+1. No terminal local, execute:
+```bash
+composer update --lock
+```
+
+Ou se preferir atualizar todas as dependências:
+```bash
+composer update
+```
+
+2. Faça commit das alterações:
+```bash
+git add composer.lock composer.json
+git commit -m "Update PHP version to 8.4"
+git push
+```
+
+### Passo 6: Gerar APP_KEY
 
 1. No terminal local, execute:
 ```bash
@@ -100,7 +121,7 @@ php artisan key:generate --show
 APP_KEY=base64:SUA_CHAVE_AQUI
 ```
 
-### Passo 6: Configurar Build e Start Commands
+### Passo 7: Configurar Build e Start Commands
 
 O Railway geralmente detecta Laravel automaticamente, mas você pode configurar manualmente:
 
@@ -122,13 +143,13 @@ php artisan migrate --force && php artisan config:cache && php artisan route:cac
 php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
 ```
 
-### Passo 7: Configurar Domínio Público
+### Passo 8: Configurar Domínio Público
 
 1. No seu serviço, vá em **"Settings"**
 2. Ative **"Generate Domain"** para obter um domínio público
 3. Ou configure um domínio customizado em **"Custom Domain"**
 
-### Passo 8: Deploy
+### Passo 9: Deploy
 
 O Railway faz deploy automático sempre que você faz push para o repositório. Para fazer o primeiro deploy:
 
@@ -136,7 +157,7 @@ O Railway faz deploy automático sempre que você faz push para o repositório. 
 2. O Railway iniciará o build automaticamente
 3. Aguarde o deploy completar (geralmente 2-5 minutos)
 
-### Passo 9: Verificar Deploy
+### Passo 10: Verificar Deploy
 
 1. Após o deploy, acesse o domínio gerado
 2. Verifique se a aplicação está funcionando
@@ -186,14 +207,22 @@ SESSION_DRIVER=database
 
 ## 🐛 Problemas Comuns e Soluções
 
-### 1. Erro: "APP_KEY not set"
+### 1. Erro: "PHP version mismatch" ou "requires php >=8.4"
+
+**Solução:** O projeto requer PHP 8.4. Certifique-se de:
+- `composer.json` especifica `"php": "^8.4"`
+- Execute `composer update --lock` localmente
+- Faça commit e push do `composer.lock` atualizado
+- O arquivo `nixpacks.toml` está configurado para PHP 8.4
+
+### 2. Erro: "APP_KEY not set"
 
 **Solução:** Gere a chave e adicione como variável de ambiente:
 ```bash
 php artisan key:generate --show
 ```
 
-### 2. Erro: "Database connection failed"
+### 3. Erro: "Database connection failed"
 
 **Solução:** Verifique se as variáveis do banco estão mapeadas corretamente. Use as variáveis injetadas pelo Railway:
 ```env
@@ -202,7 +231,7 @@ DB_DATABASE=${{MYSQLDATABASE}}
 # etc...
 ```
 
-### 3. Erro: "Storage not writable"
+### 4. Erro: "Storage not writable"
 
 **Solução:** O Railway tem sistema de arquivos persistente, mas certifique-se de que o diretório `storage` tem permissões corretas. Adicione no build command:
 ```bash
@@ -213,7 +242,7 @@ chmod -R 775 storage bootstrap/cache
 
 **Solução:** Certifique-se de que `npm run build` está sendo executado no build command.
 
-### 5. Erro: "Port already in use"
+### 6. Erro: "Port already in use"
 
 **Solução:** Use a variável `$PORT` no comando start:
 ```bash
