@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Site\Habit\HabitController;
 use App\Http\Controllers\Site\SiteController;
+use App\Http\Controllers\Admin\ManagerController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas de login e logout
@@ -31,6 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::post('habits/{habit}/toggle', [HabitController::class, 'toggle'])->name('habits.toggle');
 });
 
+// Rotes of Admin
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/manager', [ManagerController::class, 'index'])->name('admin.manager.index');
+});
 // Rotas publicas
 Route::get('/', [SiteController::class, 'index'])->name('home');
 Route::get('/home', [SiteController::class, 'index']);
