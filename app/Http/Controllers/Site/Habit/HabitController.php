@@ -27,10 +27,15 @@ class HabitController extends Controller
             ->get();
 
         // Check current screen mode
-        $isTodayView = request()->query('view') === 'hoje';
-        $isManageView = request()->query('view') === 'gerenciar';
-        $isHistoryView = request()->query('view') === 'historico';
-        $todayDateFormatted = $isTodayView ? now()->locale('pt_BR')->translatedFormat('l, d \d\e F \d\e Y') : null;
+        $view = request()->query('view');
+        $isTodayView = $view === 'hoje';
+        $isManageView = $view === 'gerenciar';
+        $isHistoryView = $view === 'historico';
+        $isCalendarView = $view === 'calendario';
+
+        $todayDateFormatted = $isTodayView
+            ? now()->locale('pt_BR')->translatedFormat('l, d \d\e F \d\e Y')
+            : null;
 
         // Get today's completed habit IDs using already loaded logs (no additional query)
         $todayCompletedHabitIds = [];
@@ -47,7 +52,57 @@ class HabitController extends Controller
             }
         }
 
-        return view('site.habit.index', compact('habits', 'isTodayView', 'isManageView', 'isHistoryView', 'todayDateFormatted', 'todayCompletedHabitIds'));
+        // Dados específicos da tela de calendário
+        $selectedDate = null;
+        $completedHabitsOnSelectedDate = collect();
+        $logsByDay = collect();
+
+        if ($isCalendarView) {
+            // Data selecionada (padrão: hoje)
+            $selectedDateInput = request()->query('date');
+            try {
+                $selectedDate = $selectedDateInput
+                    ? Carbon::parse($selectedDateInput)
+                    : Carbon::today();
+            } catch (\Exception $e) {
+                $selectedDate = Carbon::today();
+            }
+
+            $selectedDateString = $selectedDate->toDateString();
+
+            // Agrupa todos os logs por dia (para pintar o calendário)
+            $allLogs = $habits->flatMap(function ($habit) {
+                return $habit->logs;
+            });
+
+            $logsByDay = $allLogs->groupBy(function ($log) {
+                $date = $log->completed_at;
+                return is_string($date)
+                    ? $date
+                    : $date->toDateString();
+            })->map->count();
+
+            // Hábitos concluídos na data selecionada
+            $completedHabitsOnSelectedDate = $habits->filter(function ($habit) use ($selectedDateString) {
+                return $habit->logs->contains(function ($log) use ($selectedDateString) {
+                    $logDate = is_string($log->completed_at) ? $log->completed_at : $log->completed_at->toDateString();
+                    return $logDate === $selectedDateString;
+                });
+            });
+        }
+
+        return view('site.habit.index', compact(
+            'habits',
+            'isTodayView',
+            'isManageView',
+            'isHistoryView',
+            'isCalendarView',
+            'todayDateFormatted',
+            'todayCompletedHabitIds',
+            'selectedDate',
+            'completedHabitsOnSelectedDate',
+            'logsByDay'
+        ));
     }
 
     public function create()

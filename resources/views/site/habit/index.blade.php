@@ -41,8 +41,8 @@
                 Histórico
               </a>
               <a
-                href="#"
-                class="whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-white/15 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-300/50 shadow-sm hover:shadow-md"
+                href="{{ route('habits.index', ['view' => 'calendario']) }}"
+                class="whitespace-nowrap rounded-xl border {{ $isCalendarView ?? false ? 'border-cyan-400/40 bg-cyan-500/10 text-cyan-200' : 'border-white/25 bg-white/10 text-white' }} px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-cyan-500/20 hover:text-cyan-100 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-300/50 shadow-sm hover:shadow-md"
               >
                 Calendário
               </a>
@@ -80,70 +80,115 @@
           </div>
         @endif
 
-        <div class="mt-6 space-y-3">
-          @forelse ($habits as $item)
-            <div class="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm transition hover:bg-white/15">
-              <div class="flex items-center justify-between gap-4">
-                <div class="flex items-center gap-4 flex-1">
-                  @php
-                    $isCompletedToday = in_array($item->id, $todayCompletedHabitIds ?? []);
-                  @endphp
-                  @if ($isTodayView ?? false)
-                    <form action="{{ route('habits.toggle', $item) }}" method="POST" class="inline">
-                      @csrf
-                      <button
-                        type="submit"
-                        class="rounded-lg border {{ $isCompletedToday ? 'border-emerald-400/60 bg-emerald-500/20 text-emerald-100' : 'border-white/25 bg-white/10 text-white' }} px-3 py-1.5 transition-all duration-200 {{ $isCompletedToday ? 'hover:bg-emerald-500/30' : 'hover:bg-white/15 hover:border-white/40' }} hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
-                        title="{{ $isCompletedToday ? 'Desmarcar hábito' : 'Marcar como feito' }}"
-                      >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                      </button>
-                    </form>
-                  @endif
-                  <p class="text-white font-medium">{{ $item->name }}</p>
-                  @if ($isHistoryView ?? false)
-                    <span class="text-sm text-gray-300">{{ $item->logs?->count() ?? 0 }} vezes</span>
-                  @endif
-                </div>
-                @if ($isManageView ?? false)
-                  <div class="flex items-center gap-2">
-                    <a href="{{ route('habits.edit', $item) }}">
-                      <button
-                        type="button"
-                        class="rounded-lg border border-cyan-400/40 bg-cyan-500/10 px-3 py-1.5 text-cyan-200 transition hover:bg-cyan-500/20 hover:text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
-                        title="Editar"
-                      >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                      </button>
-                    </a>
-                    <form action="{{ route('habits.destroy', $item) }}" method="POST" class="inline">
-                      @csrf
-                      @method('DELETE')
-                      <button
-                        type="submit"
-                        onclick="return confirm('Tem certeza que deseja remover este hábito?')"
-                        class="rounded-lg border border-rose-400/40 bg-rose-500/10 px-3 py-1.5 text-rose-200 transition hover:bg-rose-500/20 hover:text-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
-                        title="Remover"
-                      >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                      </button>
-                    </form>
-                  </div>
+        {{-- CONTEÚDO PRINCIPAL POR ABA --}}
+        @if ($isCalendarView ?? false)
+          {{-- Visão de Calendário --}}
+          <div class="mt-6 grid gap-6 lg:grid-cols-[1.4fr,1fr]">
+            <div>
+              @if ($selectedDate)
+                <x-calendar.month :selected-date="$selectedDate" :logs-by-day="$logsByDay" />
+              @endif
+            </div>
+            <div class="space-y-3">
+              <div class="rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
+                <h3 class="text-sm font-semibold text-white">
+                  Atividades em
+                  <span class="text-cyan-200">
+                    {{ optional($selectedDate)->locale('pt_BR')->translatedFormat('d \d\e F \d\e Y') }}
+                  </span>
+                </h3>
+                @if (($completedHabitsOnSelectedDate ?? collect())->isEmpty())
+                  <p class="mt-3 text-sm text-gray-300">
+                    Nenhum hábito foi marcado como feito neste dia.
+                  </p>
+                @else
+                  <ul class="mt-3 space-y-2">
+                    @foreach ($completedHabitsOnSelectedDate as $habit)
+                      <li class="flex items-center gap-2 text-sm text-gray-100">
+                        <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/60 text-xs">
+                          ✓
+                        </span>
+                        <span>{{ $habit->name }}</span>
+                      </li>
+                    @endforeach
+                  </ul>
                 @endif
               </div>
             </div>
-          @empty
-            <div class="rounded-xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm text-center">
-              <p class="text-gray-300">Nenhum hábito cadastrado ainda.</p>
-            </div>
-          @endforelse
-        </div>
+          </div>
+        @else
+          {{-- Visões Hoje / Histórico / Gerenciar --}}
+          <div class="mt-6 space-y-3">
+            @forelse ($habits as $item)
+              @php
+                $isCompletedToday = in_array($item->id, $todayCompletedHabitIds ?? []);
+              @endphp
+
+              {{-- VISUALIZAÇÃO HOJE / GERENCIAR --}}
+              @if (($isTodayView ?? false) || ($isManageView ?? false))
+                <div class="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm transition hover:bg-white/15">
+                  <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4 flex-1">
+                      @if ($isTodayView ?? false)
+                        <form action="{{ route('habits.toggle', $item) }}" method="POST" class="inline">
+                          @csrf
+                          <button
+                            type="submit"
+                            class="rounded-lg border {{ $isCompletedToday ? 'border-emerald-400/60 bg-emerald-500/20 text-emerald-100' : 'border-white/25 bg-white/10 text-white' }} px-3 py-1.5 transition-all duration-200 {{ $isCompletedToday ? 'hover:bg-emerald-500/30' : 'hover:bg-white/15 hover:border-white/40' }} hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
+                            title="{{ $isCompletedToday ? 'Desmarcar hábito' : 'Marcar como feito' }}"
+                          >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </button>
+                        </form>
+                      @endif
+                      <p class="text-white font-medium">{{ $item->name }}</p>
+                    </div>
+                    @if ($isManageView ?? false)
+                      <div class="flex items-center gap-2">
+                        <a href="{{ route('habits.edit', $item) }}">
+                          <button
+                            type="button"
+                            class="rounded-lg border border-cyan-400/40 bg-cyan-500/10 px-3 py-1.5 text-cyan-200 transition hover:bg-cyan-500/20 hover:text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
+                            title="Editar"
+                          >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                          </button>
+                        </a>
+                        <form action="{{ route('habits.destroy', $item) }}" method="POST" class="inline">
+                          @csrf
+                          @method('DELETE')
+                          <button
+                            type="submit"
+                            onclick="return confirm('Tem certeza que deseja remover este hábito?')"
+                            class="rounded-lg border border-rose-400/40 bg-rose-500/10 px-3 py-1.5 text-rose-200 transition hover:bg-rose-500/20 hover:text-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
+                            title="Remover"
+                          >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                          </button>
+                        </form>
+                      </div>
+                    @endif
+                  </div>
+                </div>
+              @endif
+
+              {{-- VISUALIZAÇÃO HISTÓRICO --}}
+              @if ($isHistoryView ?? false)
+                <x-habit.history :habit="$item" />
+              @endif
+            @empty
+              <div class="rounded-xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm text-center">
+                <p class="text-gray-300">Nenhum hábito cadastrado ainda.</p>
+              </div>
+            @endforelse
+          </div>
+        @endif
       </section>
     </div>
   </main>
