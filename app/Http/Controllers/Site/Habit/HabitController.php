@@ -26,8 +26,10 @@ class HabitController extends Controller
             ->with('logs')
             ->get();
 
-        // Check if viewing "today" view
+        // Check current screen mode
         $isTodayView = request()->query('view') === 'hoje';
+        $isManageView = request()->query('view') === 'gerenciar';
+        $isHistoryView = request()->query('view') === 'historico';
         $todayDateFormatted = $isTodayView ? now()->locale('pt_BR')->translatedFormat('l, d \d\e F \d\e Y') : null;
 
         // Get today's completed habit IDs using already loaded logs (no additional query)
@@ -45,7 +47,7 @@ class HabitController extends Controller
             }
         }
 
-        return view('site.habit.index', compact('habits', 'isTodayView', 'todayDateFormatted', 'todayCompletedHabitIds'));
+        return view('site.habit.index', compact('habits', 'isTodayView', 'isManageView', 'isHistoryView', 'todayDateFormatted', 'todayCompletedHabitIds'));
     }
 
     public function create()
