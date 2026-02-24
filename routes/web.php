@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
 
 // Rotes of Admin
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/manager', [ManagerController::class, 'index'])->name('admin.manager.index');
+    Route::resource('Admin', ManagerController::class);
 });
 // Rotas publicas
 Route::get('/', [SiteController::class, 'index'])->name('home');

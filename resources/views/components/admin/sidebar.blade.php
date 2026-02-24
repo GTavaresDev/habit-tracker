@@ -17,7 +17,7 @@
         $isUsers = $currentTab === 'usuarios';
       @endphp
       <a
-        href="{{ route('admin.manager.index', ['tab' => 'usuarios']) }}"
+        href="{{ route('Admin.index', ['tab' => 'usuarios']) }}"
         class="flex items-center gap-3 rounded-xl px-4 py-3 transition
                {{ $isUsers ? 'bg-cyan-500/15 text-cyan-100 border border-cyan-400/40' : 'text-gray-200 border border-transparent hover:bg-white/10 hover:text-white' }}"
       >
@@ -34,7 +34,7 @@
         $isLogs = $currentTab === 'logs';
       @endphp
       <a
-        href="{{ route('admin.manager.index', ['tab' => 'logs']) }}"
+        href="{{ route('Admin.index', ['tab' => 'logs']) }}"
         class="flex items-center gap-3 rounded-xl px-4 py-3 transition
                {{ $isLogs ? 'bg-fuchsia-500/15 text-fuchsia-100 border border-fuchsia-400/40' : 'text-gray-200 border border-transparent hover:bg-white/10 hover:text-white' }}"
       >

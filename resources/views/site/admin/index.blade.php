@@ -34,7 +34,6 @@
 
           @php
             $currentTab = request()->query('tab', 'usuarios');
-            $logs = $logs ?? collect();
           @endphp
 
           {{-- Cards de Estatísticas (sempre visíveis) --}}
@@ -108,18 +107,28 @@
                           <span>{{ $user->logs_count ?? 0 }} logs</span>
                         </div>
                         <div class="flex items-center gap-2">
-                          <button
-                            type="button"
-                            class="rounded-lg border border-white/30 bg-white/5 px-2.5 py-1 text-xs text-gray-100 hover:bg-white/15 transition"
+                          <a href="{{ route('Admin.edit', $user) }}">
+                            <button
+                              type="button"
+                              class="rounded-lg border border-white/30 bg-white/5 px-2.5 py-1 text-xs text-gray-100 hover:bg-white/15 transition"
+                            >
+                              Editar
+                            </button>
+                          </a>
+                          <form
+                            action="{{ route('Admin.destroy', ['Admin' => $user]) }}"
+                            method="POST"
+                            onsubmit="return confirm('Tem certeza que deseja remover este usuário?');"
                           >
-                            Editar
-                          </button>
-                          <button
-                            type="button"
-                            class="rounded-lg border border-rose-400/40 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-100 hover:bg-rose-500/20 transition"
-                          >
-                            Remover
-                          </button>
+                            @csrf
+                            @method('DELETE')
+                            <button
+                              type="submit"
+                              class="rounded-lg border border-rose-400/40 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-100 hover:bg-rose-500/20 transition"
+                            >
+                              Remover
+                            </button>
+                          </form>
                         </div>
                       </div>
                     </div>
@@ -183,3 +192,4 @@
     </div>
   </main>
 </x-layout>
+
